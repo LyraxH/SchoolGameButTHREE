@@ -8,22 +8,22 @@
 import java.util.Scanner;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Random; 
 public class Game
 {
     // world building variables;
-    String grid[][];
     int buffs;
     int treasure;
     int gridSize;
     // misc variables
     Scanner input = new Scanner(System.in);
     String breaker = "↓--------------------↓";
-    Random rng = new Random();
+    Random rng = new Random(); // rng.nextInt(gridSize);
     public Game(){
          InitializeGame();
     }
     public void InitializeGame(){
+        // sets parameters for the map based on what the player wants.
         System.out.println("How many buffs do you want on the map? Recommendation: 1-2");
         buffs = input.nextInt();
         System.out.println("How many obtainable treasures do you want on the map? Recommendation: 2-4");
@@ -31,9 +31,10 @@ public class Game
         gridSize = (buffs + treasure) * 2;
         System.out.println("Creating a " + gridSize + "x" + gridSize + " map with " + buffs + " buffs and " + treasure + " treasures");
         // makes entire grid null
-        for (int i = 0; i < gridSize; i++){ // changes y axis
-            for (int t = 0; t < gridSize; t++){ // changes x axis
-                grid[t][i] = "fuckignsomething";
+        String grid[][] = new String[gridSize][gridSize];
+        for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
+            for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
+                grid[t][i] = "nothing";
             }
         }
         DrawGame();
@@ -46,8 +47,8 @@ public class Game
     public void DrawGame(){
         for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
-                if (grid[t][i] == "typenull"){
-                    System.out.print("typenull"); // prints what should be where
+                if (grid[t][i] == "nothing"){
+                    System.out.print("SQUARE"); // prints what should be where
                 }
             }
             System.out.println(""); // next line
