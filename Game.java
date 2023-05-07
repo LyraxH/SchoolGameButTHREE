@@ -19,22 +19,38 @@ public class Game
     Scanner input = new Scanner(System.in);
     String breaker = "↓--------------------↓";
     Random rng = new Random(); // rng.nextInt(gridSize);
+    public String grid[][] = new String[100][100];
     public Game(){
          InitializeGame();
     }
     public void InitializeGame(){
         // sets parameters for the map based on what the player wants.
-        System.out.println("How many buffs do you want on the map? Recommendation: 1-2");
+        System.out.println("How many buffs do you want on the map? Recommendation: 1-2 Max: 10");
         buffs = input.nextInt();
-        System.out.println("How many obtainable treasures do you want on the map? Recommendation: 2-4");
+        if (buffs > 10){
+            System.out.println("Plese enter a number less than 10");
+            InitializeGame();
+            return;
+        }
+        System.out.println("How many obtainable treasures do you want on the map? Recommendation: 2-4 Max: 10");
         treasure = input.nextInt();
+        if (treasure > 10){
+            System.out.println("Plese enter a number less than 10");
+            InitializeGame();
+            return;
+        }
         gridSize = (buffs + treasure) * 2;
         System.out.println("Creating a " + gridSize + "x" + gridSize + " map with " + buffs + " buffs and " + treasure + " treasures");
         // makes entire grid null
-        String grid[][] = new String[gridSize][gridSize];
         for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
-                grid[t][i] = "nothing";
+                int random = rng.nextInt(2);
+                System.out.println(random);
+                if (random == 0){
+                    grid[t][i] = "nothing";
+                } else if (random == 1){
+                    grid[t][i] = "something";
+                }
             }
         }
         DrawGame();
@@ -48,7 +64,10 @@ public class Game
         for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
                 if (grid[t][i] == "nothing"){
-                    System.out.print("SQUARE"); // prints what should be where
+                    System.out.print("██"); // prints what should be where
+                    // ░░
+                } else if (grid[t][i] == "something"){
+                    System.out.print("░░");
                 }
             }
             System.out.println(""); // next line
