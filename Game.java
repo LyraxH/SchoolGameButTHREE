@@ -52,17 +52,26 @@ public class Game
                 grid[i][t] = "null";
             }
         }
-        for (int l = 0; l < treasure; l++){
+        for (int l = 0; l < treasure; l++){ // creates the treasure variables
             int randomOne  = rng.nextInt(gridSize);
             int randomTwo  = rng.nextInt(gridSize);
             grid[randomOne][randomTwo] = "treasure";
             System.out.println("Treasure created at " + randomOne + " " + randomTwo);
         }
-        for (int l = 0; l < buffs; l++){
+        for (int l = 0; l < buffs; l++){ // creates the buffs variables
             int randomOne  = rng.nextInt(gridSize);
-        int randomTwo  = rng.nextInt(gridSize);
+            int randomTwo  = rng.nextInt(gridSize);
             grid[randomOne][randomTwo] = "buff";
             System.out.println("Buff created at " + randomOne + " " + randomTwo);
+        }
+        int walls = gridSize * 4;
+        System.out.println(walls);
+        for (int l = 0; l < walls; l++){
+            int randomOne  = rng.nextInt(gridSize);
+            int randomTwo  = rng.nextInt(gridSize);
+            if (grid[randomOne][randomTwo] == "null"){
+                grid[randomOne][randomTwo] = "wall";
+            }
         }
         for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
@@ -93,5 +102,8 @@ public class Game
             }
             System.out.println(""); // next line
         }
+    }
+    public void CheckMove(){
+        
     }
 }
