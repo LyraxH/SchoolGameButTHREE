@@ -15,6 +15,7 @@ public class Game
     int treasure;
     int gridSize;
     int enemies;
+    int border;
     // misc variables
     Scanner input = new Scanner(System.in); // variable to get keyboard inputs.
     String breaker = "↓--------------------↓"; // just to split up text to make it more readable
@@ -40,9 +41,10 @@ public class Game
             return;
         }
         gridSize = (buffs + treasure) * 2;
-        System.out.println("Creating a " + gridSize + "x" + gridSize + " map with " + buffs + " buffs and " + treasure + " treasures");
+        //System.out.println("Creating a " + gridSize + "x" + gridSize + " map with " + buffs + " buffs and " + treasure + " treasures");
         enemies = gridSize / 2;
-        System.out.println("And " + enemies + " enemies");
+        border = gridSize + 1;
+        //System.out.println("And " + enemies + " enemies");
         // makes entire grid null
         CreateMap();
     }
@@ -52,45 +54,30 @@ public class Game
                 grid[i][t] = "null";
             }
         }
-        int borderX = gridSize++;
-        int borderY = gridSize++;
-        for (int i = 0; i < gridSize; i++){
-             grid[borderX][borderY] = "BORDER";
-        }
         for (int l = 0; l < treasure; l++){ // creates the treasure variables
             int randomOne  = rng.nextInt(gridSize);
             int randomTwo  = rng.nextInt(gridSize);
             if (grid[randomOne][randomTwo] == "treasure"){
+                //System.out.println("Duplicate Space, Restarting render");
                 CreateMap();
                 return;
             } else if (grid[randomOne][randomTwo] == "null"){
                 grid[randomOne][randomTwo] = "treasure";
-                System.out.println("Treasure created at " + randomOne + " " + randomTwo);
+                //System.out.println("Treasure created at " + randomOne + " " + randomTwo);
             }
         }
         for (int l = 0; l < buffs; l++){ // creates the buffs variables
             int randomOne  = rng.nextInt(gridSize);
             int randomTwo  = rng.nextInt(gridSize);
             if (grid[randomOne][randomTwo] == "treasure" || grid[randomOne][randomTwo] == "buff"){
+                //System.out.println("Duplicate Space, Restarting render");
                 CreateMap();
                 return;
             } else if (grid[randomOne][randomTwo] == "null"){
                 grid[randomOne][randomTwo] = "buff";
-                System.out.println("Buff created at " + randomOne + " " + randomTwo);
+                //System.out.println("Buff created at " + randomOne + " " + randomTwo);
             }
         }
-        /**  WALLS SCRIPT, WILL REPLACE LATER WITH SOMETHING ELSE LOL
-        int walls = gridSize * 5;
-        System.out.println(walls);
-        for (int l = 0; l < walls; l++){
-            int randomOne  = rng.nextInt(gridSize);
-            int randomTwo  = rng.nextInt(gridSize);
-            if (grid[randomOne][randomTwo] == "null"){
-                grid[randomOne][randomTwo] = "wall";
-            }
-        }
-        **/
-        
         for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
                 if (grid[i][t] == "null"){
@@ -98,12 +85,20 @@ public class Game
                 }
             }
         }
+        for (int i = 0; i < border; i++){
+            grid[i][gridSize] = "BORDER";
+            //System.out.println("Placing border at " + i + " : " + border);
+        }
+        for (int i = 0; i < border; i++){
+            grid[gridSize][i] = "BORDER";
+            //System.out.println("Placing border at " + i + " : " + border);
+        }
         DrawGame();
     }
     public void DrawGame(){
-        //System.out.println("\f");
-        for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
-            for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
+        System.out.println("\f");
+        for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
+            for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
                 if (grid[t][i] == "wall"){
                     System.out.print("██"); // prints what should be where
                 } else if (grid[t][i] == "treasure"){
@@ -114,8 +109,6 @@ public class Game
                     System.out.print("░░"); // prints what should be where
                 } else if (grid[t][i] == "path"){
                     System.out.print("▒▒"); // prints what should be where
-                } else if (grid[t][i] == "BORDER"){
-                    System.out.print("🐢 ");
                 }
             }
             System.out.println(""); // next line
