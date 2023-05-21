@@ -104,14 +104,16 @@ public class Game
             //System.out.println("Y: " + startingY);
             for (int w = 0; w < walls; w++){
                 int direction = rng.nextInt(3);
+                int nextX;
+                int nextY;
                 if (direction == 0){
-                    // go up
+                    nextY = startingY - 1; // goes up
                 } else if (direction == 1){
-                    // go down
+                    nextY = startingY + 1; // goes down
                 } else if (direction == 2){
-                    // go left
+                    nextX = startingX - 1; //goes left
                 } else if (direction == 3){
-                    // go right
+                    nextX = startingX + 1;// goes right
                 }
             }
         }
