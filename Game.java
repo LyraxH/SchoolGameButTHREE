@@ -102,7 +102,7 @@ public class Game
             int startingY = obtainLocationY.get(i);
             //System.out.println("X: " + startingX);
             //System.out.println("Y: " + startingY);
-            for (int w = 0; w < walls; w++){
+            for (int w = 0; w < 5; w++){
                 int direction = rng.nextInt(3);
                 int nextX;
                 int nextY;
@@ -110,24 +110,36 @@ public class Game
                     nextY = startingY - 1; // goes up
                     if (nextY < 0){ // if going up makes you hit a border or goes over the edge
                         nextY = startingY + 2;
+                        System.out.println("PLACE A WALL PLEASE");
+                        placeWall(startingX, nextY);
+                    } else {
                         placeWall(startingX, nextY);
                     }
                 } else if (direction == 1){
                     nextY = startingY + 1; // goes down
                     if (grid[startingX][nextY] == "BORDER"){ // if going down makes you hit a border or goes over the edge
                         nextY = startingY - 1;
+                        System.out.println("PLACE A WALL PLEASE");
+                        placeWall(startingX, nextY);
+                    }  else {
                         placeWall(startingX, nextY);
                     }
                 } else if (direction == 2){
                     nextX = startingX - 1; //goes left
                     if (nextX < 0){ // if going left makes you hit a border or goes over the edge
                         nextY = startingY + 2;
+                        System.out.println("PLACE A WALL PLEASE");
+                        placeWall(nextX, startingY);
+                    } else {
                         placeWall(nextX, startingY);
                     }
                 } else if (direction == 3){
                     nextX = startingX + 1;// goes right
                     if (grid[nextX][startingY] == "BORDER"){ // if going right makes you hit a border or goes over the edge
                         nextY = startingY - 1;
+                        System.out.println("PLACE A WALL PLEASE");
+                        placeWall(nextX, startingY);
+                    } else {
                         placeWall(nextX, startingY);
                     }
                 }
@@ -137,14 +149,15 @@ public class Game
             for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
                 if (grid[i][t] == "null"){
-                    grid[i][t] = "path"; //makes everything that is nothing, a wall
+                    grid[i][t] = "wall"; //makes everything that is nothing, a wall
                 }
             }
         }
         DrawGame();
     }
     public void placeWall(int x, int y){
-        grid[x][y] = "wall";
+        System.out.println("Placing wall at: X: " + x + " Y: " + y);
+        grid[x][y] = "path";
         return;
     }
     public void DrawGame(){
@@ -152,15 +165,15 @@ public class Game
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
                 if (grid[t][i] == "wall"){
-                    System.out.print("██"); // prints what should be where
+                    System.out.print("██w"); // prints what should be where
                 } else if (grid[t][i] == "treasure"){
-                    System.out.print("▓▓"); // prints what should be where
+                    System.out.print("▓▓t"); // prints what should be where
                 } else if (grid[t][i] == "buff"){
-                    System.out.print("░░"); // prints what should be where
+                    System.out.print("░░b"); // prints what should be where
                 } else if (grid[t][i] == "BORDER"){
-                    System.out.print("░░"); // prints what should be where
+                    System.out.print("░░B"); // prints what should be where
                 } else if (grid[t][i] == "path"){
-                    System.out.print("▒▒"); // prints what should be where
+                    System.out.print("▒▒P"); // prints what should be where
                 }
             }
             System.out.println(""); // next line
