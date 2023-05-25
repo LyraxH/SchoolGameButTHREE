@@ -98,91 +98,8 @@ public class Game
         }
         //this is the annoying part that creates paths that bridge off of the obtainables making them all acessable.
         // BIGGEST PROBLEM, MAKING PATH SYSTEM THAT WORKS. LOTS OF TRIAL AND ERROR INCOMING
-        for (int i = 0; i < obtainables; i++){
-            int startingX = obtainLocationX.get(i);
-            int startingY = obtainLocationY.get(i);
-            //System.out.println("X: " + startingX);
-            //System.out.println("Y: " + startingY);
-            for (int w = 0; w < 7; w++){
-                int direction = rng.nextInt(3);
-                int nextX;
-                int nextY;
-                if (direction == 0){
-                    nextY = startingY - 1; // goes up
-                    if (nextY < 0){ // if going up makes you hit a border or goes over the edge
-                        nextY = startingY + 2;
-                        System.out.println("PLACEING WALL OTHERSIDE");
-                        placeWall(startingX, nextY);
-                    } else if (grid[startingX][nextY] == "treasure"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY + 1;
-                        System.out.println("PLACEING WALL OTHERSIDE TRESURE");
-                        placeWall(startingX, nextY);
-                    } else if (grid[startingX][nextY] == "buff"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY + 1;
-                        System.out.println("PLACEING WALL OTHERSIDE BUFF");
-                        placeWall(startingX, nextY);
-                    }else{
-                        System.out.println("placing wall");
-                        placeWall(startingX, nextY);
-                    }
-                } else if (direction == 1){
-                    nextY = startingY + 1; // goes down
-                    if (grid[startingX][nextY] == "BORDER"){ // if going down makes you hit a border or goes over the edge
-                        nextY = startingY - 1;
-                        System.out.println("PLACEING WALL OTHERSIDE");
-                        placeWall(startingX, nextY);
-                    } else if (grid[startingX][nextY] == "treasure"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY - 1;
-                        System.out.println("PLACEING WALL OTHERSIDE TRESURE");
-                        placeWall(startingX, nextY);
-                    } else if (grid[startingX][nextY] == "buff"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY - 1;
-                        System.out.println("PLACEING WALL OTHERSIDE BUFF");
-                        placeWall(startingX, nextY);
-                    }else{
-                        System.out.println("placing wall");
-                        placeWall(startingX, nextY);
-                    }
-                } else if (direction == 2){
-                    nextX = startingX - 1; //goes left
-                    if (nextX < 0){ // if going left makes you hit a border or goes over the edge
-                        nextY = startingY + 2;
-                        System.out.println("PLACEING WALL OTHERSIDE");
-                        placeWall(nextX, startingY);
-                    } else if (grid[nextX][startingY] == "treasure"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY + 1;
-                        System.out.println("PLACEING WALL OTHERSIDE TRESURE");
-                        placeWall(nextX, startingY);
-                    } else if (grid[nextX][startingY] == "buff"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY + 1;
-                        System.out.println("PLACEING WALL OTHERSIDE BUFF");
-                        placeWall(nextX, startingY);
-                    }else{
-                        System.out.println("placing wall");
-                        placeWall(nextX, startingY);
-                    }
-                } else if (direction == 3){
-                    nextX = startingX + 1;// goes right
-                    if (grid[nextX][startingY] == "BORDER"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY - 1;
-                        System.out.println("PLACEING WALL OTHERSIDE BORDER");
-                        placeWall(nextX, startingY);
-                    } else if (grid[nextX][startingY] == "treasure"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY - 1;
-                        System.out.println("PLACEING WALL OTHERSIDE TRESURE");
-                        placeWall(nextX, startingY);
-                    } else if (grid[nextX][startingY] == "buff"){ // if going right makes you hit a border or goes over the edge
-                        nextY = startingY - 1;
-                        System.out.println("PLACEING WALL OTHERSIDE BUFF");
-                        placeWall(nextX, startingY);
-                    }else{
-                        System.out.println("placing wall");
-                        placeWall(nextX, startingY);
-                    }
-                }
-            }
-        }
-            for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
+        CheckBoundries();
+        for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
                 if (grid[i][t] == "null"){
                     grid[i][t] = "wall"; //makes everything that is nothing, a wall
@@ -191,7 +108,47 @@ public class Game
         }
         DrawGame();
     }
-    public void placeWall(int x, int y){
+    public void CheckBoundries(){ // checks surroundings, and if branching out will hit any of them, and then tells the initial calculation to stay away from branching to that side
+        for (int i = 0; i < obtainables; i++){
+            int startingX = obtainLocationX.get(i);
+            int startingY = obtainLocationY.get(i);
+            int checkingX = startingX + 1;
+            boolean up; // true means you can move, false means you cant
+            boolean down;
+            boolean left;
+            boolean right;
+            if (grid[checkingX][startingY] == "BORDER"){ // checking if moving right makes you hit the border
+                right = false;
+            } else {
+                right = true;
+            }
+            checkingX = startingX - 1;
+            if (checkingX < 0){ // checking if moving left makes you leave the grid
+                left = false;
+            } else {
+                left = true;
+            }
+            int checkingY = startingY + 1;
+            if (grid[startingX][checkingY] == "BORDER"){ // checking if moving down makes you hit the border
+                down = false;
+            } else {
+                down = true;
+            }
+            checkingY = startingY - 1;
+            if (checkingY < 0){ // checking if moving up makes you leave the grid
+                up = false;
+            } else {
+                up = true;
+            }
+            System.out.println("Obtainable at X: " + startingX + " Y: " + startingY);
+            System.out.println("UP: " + up);
+            System.out.println("DOWN: " + down);
+            System.out.println("LEFT: " + left);
+            System.out.println("RIGHT: " + right);
+            System.out.println("----------------------");
+        }
+    }
+    public void PlaceWall(int x, int y){
         grid[x][y] = "path";
         return;
     }
