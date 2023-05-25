@@ -108,25 +108,44 @@ public class Game
                 int nextY;
                 if (direction == 0){
                     nextY = startingY - 1; // goes up
+                    if (nextY < 0){ // if going up makes you hit a border or goes over the edge
+                        nextY = startingY + 2;
+                        placeWall(startingX, nextY);
+                    }
                 } else if (direction == 1){
                     nextY = startingY + 1; // goes down
+                    if (grid[startingX][nextY] == "BORDER"){ // if going down makes you hit a border or goes over the edge
+                        nextY = startingY - 1;
+                        placeWall(startingX, nextY);
+                    }
                 } else if (direction == 2){
                     nextX = startingX - 1; //goes left
+                    if (nextX < 0){ // if going left makes you hit a border or goes over the edge
+                        nextY = startingY + 2;
+                        placeWall(nextX, startingY);
+                    }
                 } else if (direction == 3){
                     nextX = startingX + 1;// goes right
-                }
-            }
-        }
-        for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
-            for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
-                if (grid[i][t] == "null"){
-                    grid[i][t] = "wall"; //makes everything that is nothing, a wall
+                    if (grid[nextX][startingY] == "BORDER"){ // if going right makes you hit a border or goes over the edge
+                        nextY = startingY - 1;
+                        placeWall(nextX, startingY);
+                    }
                 }
             }
         }
         // BIGGEST PROBLEM, MAKING PATH SYSTEM THAT WORKS. LOTS OF TRIAL AND ERROR INCOMING
-        
+            for (int i = 0; i < gridSize; i++){ // changes whats being printed for the y axis
+            for (int t = 0; t < gridSize; t++){ // changes whats being printed for the x axis
+                if (grid[i][t] == "null"){
+                    grid[i][t] = "path"; //makes everything that is nothing, a wall
+                }
+            }
+        }
         DrawGame();
+    }
+    public void placeWall(int x, int y){
+        grid[x][y] = "wall";
+        return;
     }
     public void DrawGame(){
         //System.out.println("\f");
