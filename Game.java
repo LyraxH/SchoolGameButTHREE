@@ -109,33 +109,33 @@ public class Game
         DrawGame();
     }
     public void CheckBoundries(){ // checks surroundings, and if branching out will hit any of them, and then tells the initial calculation to stay away from branching to that side
-        for (int i = 0; i < obtainables; i++){
-            int startingX = obtainLocationX.get(i);
-            int startingY = obtainLocationY.get(i);
-            int checkingX = startingX + 1;
+        for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
+            int startingX = obtainLocationX.get(i); // x location
+            int startingY = obtainLocationY.get(i); // y location
             boolean up; // true means you can move, false means you cant
-            boolean down;
-            boolean left;
-            boolean right;
-            if (grid[checkingX][startingY] == "BORDER"){ // checking if moving right makes you hit the border
+            boolean down; // true means you can move, false means you cant
+            boolean left; // true means you can move, false means you cant
+            boolean right; // true means you can move, false means you cant
+            int checkingX = startingX + 1;
+            if (grid[checkingX][startingY] == "BORDER" || grid[checkingX][startingY] == "treasure" || grid[checkingX][startingY] == "buff" || grid[checkingX][startingY] == "path"){ // checking if moving right makes you hit the border
                 right = false;
             } else {
                 right = true;
             }
             checkingX = startingX - 1;
-            if (checkingX < 0){ // checking if moving left makes you leave the grid
+            if (checkingX < 0  || grid[checkingX][startingY] == "treasure" || grid[checkingX][startingY] == "buff" || grid[checkingX][startingY] == "path"){ // checking if moving left makes you leave the grid
                 left = false;
             } else {
                 left = true;
             }
             int checkingY = startingY + 1;
-            if (grid[startingX][checkingY] == "BORDER"){ // checking if moving down makes you hit the border
+            if (grid[startingX][checkingY] == "BORDER" || grid[startingX][checkingY] == "treasure" || grid[startingX][checkingY] == "buff" || grid[startingX][checkingY] == "path"){ // checking if moving down makes you hit the border
                 down = false;
             } else {
                 down = true;
             }
             checkingY = startingY - 1;
-            if (checkingY < 0){ // checking if moving up makes you leave the grid
+            if (checkingY < 0 || grid[startingX][checkingY] == "treasure" || grid[startingX][checkingY] == "buff" || grid[startingX][checkingY] == "path"){ // checking if moving up makes you leave the grid
                 up = false;
             } else {
                 up = true;
@@ -147,6 +147,9 @@ public class Game
             System.out.println("RIGHT: " + right);
             System.out.println("----------------------");
         }
+    }
+    public void PlaceWalls(){
+        
     }
     public void PlaceWall(int x, int y){
         grid[x][y] = "path";
