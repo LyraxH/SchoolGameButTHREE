@@ -17,7 +17,7 @@ public class Game
     int gridSize; // how big the playable map is
     int enemies; // how many enemies should show up
     int border; // where the border stands (one larger than playable map)
-    int walls; // how many walls and/or barriers should get in the players way
+    int paths; // how many paths are required to make every area accessable
     int obtainables;
     // misc variables
     Scanner input = new Scanner(System.in); // variable to get keyboard inputs.
@@ -26,8 +26,14 @@ public class Game
     public String grid[][] = new String[100][100]; // size is set to maximum size, however not all of it will be used
     ArrayList<Integer> obtainLocationX = new ArrayList<Integer>();
     ArrayList<Integer> obtainLocationY = new ArrayList<Integer>();
+    ArrayList<Integer> obtainPathX = new ArrayList<Integer>();
+    ArrayList<Integer> obtainPathY = new ArrayList<Integer>();    
     public Game(){
-         InitializeGame();
+        obtainLocationX.clear();
+        obtainLocationY.clear();
+        obtainPathX.clear();
+        obtainPathY.clear();
+        InitializeGame();
     }
     public void InitializeGame(){
         // sets parameters for the map based on what the player wants.
@@ -50,7 +56,7 @@ public class Game
         //System.out.println("Creating a " + gridSize + "x" + gridSize + " map with " + buffs + " buffs and " + treasure + " treasures");
         enemies = gridSize / 2;
         border = gridSize + 1;
-        walls = gridSize * 2;
+        paths = 4;
         //System.out.println("And " + enemies + " enemies");
         // makes entire grid null
         CreateMap();
@@ -99,21 +105,65 @@ public class Game
         }
         //this is the annoying part that creates paths that bridge off of the obtainables making them all acessable.
         // BIGGEST PROBLEM, MAKING PATH SYSTEM THAT WORKS. LOTS OF TRIAL AND ERROR INCOMING
+        //System.out.println("Initial Set Of Paths");
         for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
             int startingX = obtainLocationX.get(i); // x location of said obtainable
             int startingY = obtainLocationY.get(i); // y location of said obtainable
-            PlaceWalls(startingX, startingY); // checks the immediate surroundings of each obtainable
+            AssignPath(startingX, startingY); // checks the immediate surroundings of each obtainable
         }
+
+        System.out.println("Paths After");
+        for (int t = 0; t < 4; t++){
+            for (int i = 0; i < obtainPathX.size(); i++){ // goes through the location of all paths
+                int startingX = obtainPathX.get(i); // x location of said paths
+                int startingY = obtainPathY.get(i); // y location of said paths
+                ConstructPaths(startingX, startingY); // checks the immediate surroundings of each obtainable
+            }
+        }
+        
         for (int i = 0; i < gridSize; i++){ // goes through entire y axis
             for (int t = 0; t < gridSize; t++){ // goes through entire y axis
                 if (grid[i][t] == "null"){ // if there is nothing there
-                    grid[i][t] = "wall"; // it becomes a path
+                    grid[i][t] = "wall"; // it becomes a wall
                 }
             }
         }
+        System.out.println(obtainPathX);
+        System.out.println(obtainPathY);
         DrawGame(); // displays the map
     }
-    public void PlaceWalls(int x,int y){ // checks surroundings, and if branching out will hit any of them, and then tells the initial calculation to stay away from branching to that side
+    public void ConstructPaths(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
+        boolean up; // true means you can move, false means you cant
+        boolean down; // true means you can move, false means you cant
+        boolean left; // true means you can move, false means you cant
+        boolean right; // true means you can move, false means you cant
+        int checkingX = x + 1;
+        if (grid[checkingX][y] == "BORDER" || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff" || grid[checkingX][y] == "path"){ // checking if moving right makes you hit the border
+            right = false;
+        } else {
+            right = true;
+        }
+        checkingX = x - 1;
+        if (checkingX <= -1  || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff" || grid[checkingX][y] == "path"){ // checking if moving left makes you leave the grid
+            left = false;
+        } else {
+            left = true;
+        }
+        int checkingY = y + 1;
+         if (grid[x][checkingY] == "BORDER" || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff" || grid[x][checkingY] == "path"){ // checking if moving down makes you hit the border
+            down = false;
+        } else {
+            down = true;
+        }
+        checkingY = y - 1;
+        if (checkingY <= -1 || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff" || grid[x][checkingY] == "path"){ // checking if moving up makes you leave the grid
+            up = false;
+        } else {
+            up = true;
+        }
+        DirectionRandomizer(up, down, left, right, x, y);
+    }
+    public void AssignPath(int x,int y){ // checks surroundings, and if branching out will hit any of them, and then tells the initial calculation to stay away from branching to that side
         boolean up; // true means you can move, false means you cant
         boolean down; // true means you can move, false means you cant
         boolean left; // true means you can move, false means you cant
@@ -150,49 +200,55 @@ public class Game
         System.out.println("RIGHT: " + right);
         System.out.println("----------------------");
         **/
+        DirectionRandomizer(up, down, left, right, x, y);
+    }
+    public void DirectionRandomizer(boolean up, boolean down, boolean left, boolean right, int x, int y){
         int direction = rng.nextInt(3);
         if (direction == 0){ // up
             System.out.println("Going up");
             if (up == false){
-                System.out.println("Can't place wall above");
+                System.out.println("Can't place path above");
                 return;
             } else {
                 PlacePath(x, (y-1));
-                System.out.println("Wall placed" + x + (y-1));
+                //System.out.println("Path placed" + x + (y-1));
             }
         } else if (direction == 1){ // down
             System.out.println("Going down");
             if (down == false){
-                System.out.println("Can't place wall below");
+                System.out.println("Can't place path below");
                 return;
             } else {
                 PlacePath(x, (y+1));
-                System.out.println("Wall placed" + x + (y+1));
+                //System.out.println("Path Placed" + x + (y+1));
             }
         } else if (direction == 2){ //  left
             System.out.println("Going left");
             if (left == false){
-                System.out.println("Can't place wall left");
+                System.out.println("Can't place path left");
                 return;
             } else {
                 PlacePath((x-1), y);
-                System.out.println("Wall placed" + (x-1) + y);
+                //System.out.println("Path Placed" + (x-1) + y);
             }
         } else if (direction == 3){ // right
             System.out.println("Going right");
             if (right == false){
-                System.out.println("Can't place wall right");
+                System.out.println("Can't place path right");
                 return;
             } else {
                 PlacePath((x+1), y);
-                System.out.println("Wall placed" + (x+1) + y);
+                //System.out.println("Path Placed" + (x+1) + y);
             }
         }
     }
     public void PlacePath(int x, int y){
         grid[x][y] = "path";
+        obtainPathX.add(x);
+        obtainPathY.add(y);
         return;
     }
+    
     public void DrawGame(){
         //System.out.println("\f");
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
