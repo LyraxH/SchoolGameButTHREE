@@ -16,6 +16,4 @@ comment7.params=x\ y
 comment7.target=void\ PlacePath(int,\ int)
 comment8.params=
 comment8.target=void\ DrawGame()
-comment9.params=
-comment9.target=void\ CheckMove()
-numComments=10
+numComments=9

@@ -112,7 +112,7 @@ public class Game
             AssignPath(startingX, startingY); // checks the immediate surroundings of each obtainable
         }
 
-        System.out.println("Paths After");
+        //System.out.println("Paths After");
         for (int t = 0; t < 4; t++){
             for (int i = 0; i < obtainPathX.size(); i++){ // goes through the location of all paths
                 int startingX = obtainPathX.get(i); // x location of said paths
@@ -121,6 +121,18 @@ public class Game
             }
         }
         
+        System.out.println("TESTING");
+        for (int i = 0; i < obtainables; i++){ // goes through the location of all paths
+            int startingX = obtainLocationX.get(i); // x location of said paths
+            int startingY = obtainLocationY.get(i); // y location of said paths
+            if (grid[(startingX - 1)][startingY] <= 0 || grid[startingX][(startingY - 1 =< 0)]){ // gets rid of index -1 error
+                // do something else
+            } else {// if nothing goes out of index -1 then do the normal calculation
+                if (grid[(startingX + 1)][startingY] != "path" && grid[(startingX - 1)][startingY] != "path" && grid[(startingX)][startingY + 1] != "path" && grid[(startingX)][startingY - 1] != "path"){// if one above, one left, one right, and one down are all empty
+                    System.out.println("Stray Obtainable at X: " + startingX + " Y: " + startingY);
+                }
+            }
+        }
         for (int i = 0; i < gridSize; i++){ // goes through entire y axis
             for (int t = 0; t < gridSize; t++){ // goes through entire y axis
                 if (grid[i][t] == "null"){ // if there is nothing there
@@ -128,8 +140,8 @@ public class Game
                 }
             }
         }
-        System.out.println(obtainPathX);
-        System.out.println(obtainPathY);
+        //System.out.println(obtainPathX);
+        //System.out.println(obtainPathY);
         DrawGame(); // displays the map
     }
     public void ConstructPaths(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
@@ -137,7 +149,7 @@ public class Game
         boolean down; // true means you can move, false means you cant
         boolean left; // true means you can move, false means you cant
         boolean right; // true means you can move, false means you cant
-        int checkingX = x + 1;
+        int checkingX = x + 1; //i realize slightly too late that this variable isnt exactly required.. 
         if (grid[checkingX][y] == "BORDER" || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff" || grid[checkingX][y] == "path"){ // checking if moving right makes you hit the border
             right = false;
         } else {
@@ -205,36 +217,36 @@ public class Game
     public void DirectionRandomizer(boolean up, boolean down, boolean left, boolean right, int x, int y){
         int direction = rng.nextInt(3);
         if (direction == 0){ // up
-            System.out.println("Going up");
+            //System.out.println("Going up");
             if (up == false){
-                System.out.println("Can't place path above");
+                //System.out.println("Can't place path above");
                 return;
             } else {
                 PlacePath(x, (y-1));
                 //System.out.println("Path placed" + x + (y-1));
             }
         } else if (direction == 1){ // down
-            System.out.println("Going down");
+            //System.out.println("Going down");
             if (down == false){
-                System.out.println("Can't place path below");
+                //System.out.println("Can't place path below");
                 return;
             } else {
                 PlacePath(x, (y+1));
                 //System.out.println("Path Placed" + x + (y+1));
             }
         } else if (direction == 2){ //  left
-            System.out.println("Going left");
+            //System.out.println("Going left");
             if (left == false){
-                System.out.println("Can't place path left");
+                //System.out.println("Can't place path left");
                 return;
             } else {
                 PlacePath((x-1), y);
                 //System.out.println("Path Placed" + (x-1) + y);
             }
         } else if (direction == 3){ // right
-            System.out.println("Going right");
+            //System.out.println("Going right");
             if (right == false){
-                System.out.println("Can't place path right");
+                //System.out.println("Can't place path right");
                 return;
             } else {
                 PlacePath((x+1), y);
@@ -267,8 +279,5 @@ public class Game
         }
         //System.out.println(obtainLocationX);
         //System.out.println(obtainLocationY);
-    }
-    public void CheckMove(){
-        
     }
 }
