@@ -125,7 +125,7 @@ public class Game
             right = true;
         }
         checkingX = x - 1;
-        if (checkingX < 0  || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff" || grid[checkingX][y] == "path"){ // checking if moving left makes you leave the grid
+        if (checkingX <= -1  || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff" || grid[checkingX][y] == "path"){ // checking if moving left makes you leave the grid
             left = false;
         } else {
             left = true;
@@ -137,12 +137,12 @@ public class Game
             down = true;
         }
         checkingY = y - 1;
-        if (checkingY < 0 || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff" || grid[x][checkingY] == "path"){ // checking if moving up makes you leave the grid
+        if (checkingY <= -1 || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff" || grid[x][checkingY] == "path"){ // checking if moving up makes you leave the grid
             up = false;
         } else {
             up = true;
         }
-        /** we know this works so commenting it out
+        /**
         System.out.println("Obtainable at X: " + x + " Y: " + y);
         System.out.println("UP: " + up);
         System.out.println("DOWN: " + down);
@@ -152,28 +152,40 @@ public class Game
         **/
         int direction = rng.nextInt(3);
         if (direction == 0){ // up
-            if (up = false){
+            System.out.println("Going up");
+            if (up == false){
+                System.out.println("Can't place wall above");
                 return;
             } else {
                 PlacePath(x, (y-1));
+                System.out.println("Wall placed" + x + (y-1));
             }
         } else if (direction == 1){ // down
-            if (up = false){
+            System.out.println("Going down");
+            if (down == false){
+                System.out.println("Can't place wall below");
                 return;
             } else {
                 PlacePath(x, (y+1));
+                System.out.println("Wall placed" + x + (y+1));
             }
         } else if (direction == 2){ //  left
-            if (left = false){
+            System.out.println("Going left");
+            if (left == false){
+                System.out.println("Can't place wall left");
                 return;
             } else {
                 PlacePath((x-1), y);
+                System.out.println("Wall placed" + (x-1) + y);
             }
         } else if (direction == 3){ // right
-            if (right = false){
+            System.out.println("Going right");
+            if (right == false){
+                System.out.println("Can't place wall right");
                 return;
             } else {
                 PlacePath((x+1), y);
+                System.out.println("Wall placed" + (x+1) + y);
             }
         }
     }
@@ -185,16 +197,14 @@ public class Game
         //System.out.println("\f");
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
-                if (grid[t][i] == "wall"){
+                if (grid[t][i] == "path"){
                     System.out.print("██"); // prints what should be where
                 } else if (grid[t][i] == "treasure"){
                     System.out.print("▓▓"); // prints what should be where
                 } else if (grid[t][i] == "buff"){
-                    System.out.print("░░"); // prints what should be where
-                } else if (grid[t][i] == "BORDER"){
-                    System.out.print("░░"); // prints what should be where
-                } else if (grid[t][i] == "path"){
                     System.out.print("▒▒"); // prints what should be where
+                } else if (grid[t][i] == "wall"){
+                    System.out.print("░░"); // prints what should be where
                 }
             }
             System.out.println(""); // next line
