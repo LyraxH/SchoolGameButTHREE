@@ -122,13 +122,43 @@ public class Game
         }
         
         System.out.println("TESTING");
-        for (int i = 0; i < obtainables; i++){ // goes through the location of all paths
+        for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
             int startingX = obtainLocationX.get(i); // x location of said paths
             int startingY = obtainLocationY.get(i); // y location of said paths
-            if (grid[(startingX - 1)][startingY] <= 0 || grid[startingX][(startingY - 1 =< 0)]){ // gets rid of index -1 error
+            System.out.println("Obtainable " + i + " X: " + startingX + " Y: " + startingY);
+            boolean up = false;// true means there is nothing above
+            boolean down = false; // true means there is nothing below
+            boolean left = false; // true means there is nothing to the left
+            boolean right = false; // true means there is nothing to the right
+            if ((startingX - 1) < 0 || (startingY - 1) < 0){ // gets rid of index -1 error
+                System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " cannot be checked because of index -1 error");
                 // do something else
             } else {// if nothing goes out of index -1 then do the normal calculation
-                if (grid[(startingX + 1)][startingY] != "path" && grid[(startingX - 1)][startingY] != "path" && grid[(startingX)][startingY + 1] != "path" && grid[(startingX)][startingY - 1] != "path"){// if one above, one left, one right, and one down are all empty
+                if (grid[(startingX + 1)][startingY] != "path" || startingX == gridSize){
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has nothing to its right, or is in the right most column");
+                    down = true;
+                } else {
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has something to its right");
+                }
+                if (grid[(startingX - 1)][startingY] != "path" || startingX == 0){
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has nothing to its left, or is in the left most column");
+                    up = true;
+                } else  {
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has something to its left");
+                }
+                if (grid[startingX][startingY +  1] != "path" || startingY == gridSize){
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has  nothing below, or is in the bottom most row");
+                    right = true;
+                } else  {
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has something below");
+                }
+                if (grid[startingX][startingY -  1] != "path" || startingY == 0){
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has nothing above, or is in the highest row");
+                    left = true;
+                } else  {
+                    System.out.println("Obtainable at X: " + startingX + " Y: " + startingY + " has something above");
+                }
+                if (up == true && down == true && left == true && right == true){
                     System.out.println("Stray Obtainable at X: " + startingX + " Y: " + startingY);
                 }
             }
@@ -138,7 +168,7 @@ public class Game
                 if (grid[i][t] == "null"){ // if there is nothing there
                     grid[i][t] = "wall"; // it becomes a wall
                 }
-            }
+            }   
         }
         //System.out.println(obtainPathX);
         //System.out.println(obtainPathY);
