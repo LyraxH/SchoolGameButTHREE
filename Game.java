@@ -29,10 +29,10 @@ public class Game
     ArrayList<Integer> obtainPathX = new ArrayList<Integer>();
     ArrayList<Integer> obtainPathY = new ArrayList<Integer>();    
     public Game(){
-        obtainLocationX.clear();
-        obtainLocationY.clear();
-        obtainPathX.clear();
-        obtainPathY.clear();
+        obtainLocationX.clear(); //clears all prior x locations stored
+        obtainLocationY.clear(); //clears all prior y locations stored
+        obtainPathX.clear(); //clears all prior x locations stored
+        obtainPathY.clear(); //clears all prior y locations stored
         InitializeGame();
     }
     public void InitializeGame(){
@@ -53,12 +53,9 @@ public class Game
         }
         obtainables = buffs + treasure;
         gridSize = obtainables * 2;
-        //System.out.println("Creating a " + gridSize + "x" + gridSize + " map with " + buffs + " buffs and " + treasure + " treasures");
         enemies = gridSize / 2;
         border = gridSize + 1;
         paths = 4;
-        //System.out.println("And " + enemies + " enemies");
-        // makes entire grid null
         CreateMap();
     }
     public void CreateMap(){
@@ -122,7 +119,8 @@ public class Game
                 ConstructPaths(startingX, startingY); // checks the immediate surroundings of each obtainable
             }
         }
-        
+        obtainPathX.clear(); //clears all prior x locations stored
+        obtainPathY.clear(); //clears all prior y locations stored
         System.out.println("TESTING");
         for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
             int startingX = obtainLocationX.get(i); // x location of said paths
@@ -162,6 +160,7 @@ public class Game
                 AssignPath(startingX, startingY);
             }
         }
+        //ConstructPaths(x,y);
         for (int i = 0; i < gridSize; i++){ // goes through entire x axis
             for (int t = 0; t < gridSize; t++){ // goes through entire y axis
                 if (grid[i][t] == "null"){ // if there is nothing there
