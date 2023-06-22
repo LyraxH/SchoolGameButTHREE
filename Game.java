@@ -18,6 +18,7 @@ public class Game
     int enemies; // how many enemies should show up
     int border; // where the border stands (one larger than playable map)
     int paths; // how many paths are required to make every area accessable
+    int replaced = -1;
     int obtainables;
     // misc variables
     Scanner input = new Scanner(System.in); // variable to get keyboard inputs.
@@ -116,15 +117,13 @@ public class Game
             for (int i = 0; i < obtainPathX.size(); i++){ // goes through the location of all paths
                 int startingX = obtainPathX.get(i); // x location of said paths
                 int startingY = obtainPathY.get(i); // y location of said paths
-                ConstructPaths(startingX, startingY); // checks the immediate surroundings of each obtainable
+                ConstructPaths(startingX, startingY); // checks the immediate surroundings of each path
             }
         }
-        obtainPathX.clear(); //clears all prior x locations stored
-        obtainPathY.clear(); //clears all prior y locations stored
         System.out.println("TESTING");
         for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
-            int startingX = obtainLocationX.get(i); // x location of said paths
-            int startingY = obtainLocationY.get(i); // y location of said paths
+            int startingX = obtainLocationX.get(i); // x location of said obtainables
+            int startingY = obtainLocationY.get(i); // y location of said obtainables
             //System.out.println("Obtainable " + i + " X: " + startingX + " Y: " + startingY);
             boolean up = false;// true means there is nothing above
             boolean down = false; // true means there is nothing below
@@ -157,7 +156,20 @@ public class Game
             if (up == true && down == true && left == true && right == true){
                 System.out.println("Stray Obtainable at X: " + startingX + " Y: " + startingY);
                 System.out.println("Re-placing Walls");
+                obtainPathX.clear(); //clears all prior x locations stored
+                obtainPathY.clear(); //clears all prior y locations stored
+                //System.out.println(obtainPathX);
+                //System.out.println(obtainPathY);
+                replaced++;
                 AssignPath(startingX, startingY);
+                System.out.println("X: " + startingX  + " Y: " + startingY);
+                System.out.println(obtainPathX);
+                System.out.println(obtainPathY);
+                int wallX = obtainPathX.get(replaced);
+                int wallY = obtainPathY.get(replaced);
+                for (int l = 0; l<5; l++){
+                    ConstructPaths(wallX, wallY);
+                }
             }
         }
         //ConstructPaths(x,y);
