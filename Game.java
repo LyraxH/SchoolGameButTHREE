@@ -34,22 +34,43 @@ public class Game
         obtainLocationY.clear(); //clears all prior y locations stored
         obtainPathX.clear(); //clears all prior x locations stored
         obtainPathY.clear(); //clears all prior y locations stored
-        InitializeGame();
+        InitializeBuffs();
+        return;
     }
-    public void InitializeGame(){
+    public void InitializeBuffs(){
         // sets parameters for the map based on what the player wants.
         System.out.println("How many buffs do you want on the map? Recommendation: 1-2 Max: 10");
-        buffs = input.nextInt();
-        if (buffs > 10){
-            System.out.println("Plese enter a number less than 10");
-            InitializeGame();
+        try {
+            buffs = 0;
+            buffs = input.nextInt();
+            if (buffs > 10){
+                System.out.println("Plese enter a number less than 10");
+                InitializeBuffs();
+                return;
+            } else {
+                InitializeTreasure();
+                return;
+            }
+        } catch (Exception e){
+            System.out.println("Plese enter a numerical value");
+            input.nextLine();
+            InitializeBuffs();
             return;
         }
+    }
+    public void InitializeTreasure(){
         System.out.println("How many obtainable treasures do you want on the map? Recommendation: 2-4 Max: 10");
-        treasure = input.nextInt();
-        if (treasure > 10){
-            System.out.println("Plese enter a number less than 10");
-            InitializeGame();
+        try {
+            treasure = input.nextInt();
+            if (treasure > 10){
+                System.out.println("Plese enter a number less than 10");
+                InitializeTreasure();
+                return;
+            }
+        } catch (Exception e){
+            System.out.println("Plese enter a numerical value");
+            input.nextLine();
+            InitializeTreasure();
             return;
         }
         obtainables = buffs + treasure;
@@ -58,6 +79,7 @@ public class Game
         border = gridSize + 1;
         paths = 4;
         CreateMap();
+        return;
     }
     public void CreateMap(){
         obtainLocationX.clear();
@@ -120,7 +142,7 @@ public class Game
                 ConstructPaths(startingX, startingY); // checks the immediate surroundings of each path
             }
         }
-        System.out.println("TESTING");
+        //System.out.println("TESTING");
         for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
             int startingX = obtainLocationX.get(i); // x location of said obtainables
             int startingY = obtainLocationY.get(i); // y location of said obtainables
@@ -162,13 +184,17 @@ public class Game
                 //System.out.println(obtainPathY);
                 replaced++;
                 AssignPath(startingX, startingY);
-                System.out.println("X: " + startingX  + " Y: " + startingY);
+                //System.out.println("X: " + startingX  + " Y: " + startingY);
                 System.out.println(obtainPathX);
                 System.out.println(obtainPathY);
-                int wallX = obtainPathX.get(replaced);
-                int wallY = obtainPathY.get(replaced);
-                for (int l = 0; l<5; l++){
-                    ConstructPaths(wallX, wallY);
+                try { 
+                    int wallX = obtainPathX.get(replaced);
+                    int wallY = obtainPathY.get(replaced);
+                    for (int l = 0; l<5; l++){
+                        ConstructPaths(wallX, wallY);
+                    }
+                } catch (Exception e){
+                    System.out.println(e);
                 }
             }
         }
