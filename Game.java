@@ -206,86 +206,77 @@ public class Game
                 }
             }   
         }
-        for (int y = 0; y < gridSize; y++){ // check every y axis
-            for (int x = 0; x < gridSize; x++){ // check every x axis
-                System.out.println("X: " + x + " Y: " + y);
-                //boolean up; // true means you can move, false means you cant
-                //boolean down; // true means you can move, false means you cant
-                boolean left; // true means you can move, false means you cant
-                boolean right; // true means you can move, false means you cant
-                int checkingX = x + 1; //i realize slightly too late that this variable isnt exactly required.. 
-                if (grid[checkingX][y] == "path" || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff"){ // checking if to the right there is a path
-                    right = true;
-                } else {
-                    right = false;
+        System.out.println("Checking for holes.");
+        for (int i = 0; i < gridSize; i++){ // goes through entire x axis
+            for (int t = 0; t < gridSize; t++){ // goes through entire y axis
+                if (grid[i][t] == "path"){
+                    System.out.println("There is a path at X: " + i + " Y: "+ t);
+                    boolean up;
+                    boolean left;
+                    boolean down;
+                    boolean right;
+                    if (grid[i][(t-1)] == "path"){
+                        up = true;
+                    } else {
+                        up = false;
+                    }
+                    if (grid[(i-1)][t] == "path"){
+                        left = true;
+                    } else {
+                        left = false;
+                    }
+                    if (grid[i][(t+1)] == "path"){
+                        down = true;
+                    } else {
+                        down = false;
+                    }
+                    if (grid[(i+1)][t] == "path"){
+                        right = true;
+                    } else {
+                        right = false;
+                    }
                 }
-                checkingX = x - 1;
-                if (grid[checkingX][y] == "path" || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff"){ // checking if to the left thre is a path
-                    left = true;
-                } else {
-                    left = false;
-                }
-                /**
-                int checkingY = y + 1;
-                if (grid[x][checkingY] == "path" || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff"){ // checking if below it is a path
-                    down = true;
-                } else {
-                    down = false;
-                }
-                checkingY = y - 1;
-                if (grid[x][checkingY] == "path" || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff"){ // checking if above it is a path
+            }   
+        }
+        //System.out.println(obtainPathX);
+        //System.out.println(obtainPathY);
+    }
+    public void CheckSurroundings(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
+        boolean up; // true means there is a path, false means there isnt
+        boolean down; // true means there is a path, false means there isnt
+        boolean left; // true means there is a path, false means there isnt
+        boolean right; // true means there is something, false means there isnt
+        System.out.println("made it to the surroundings check for x: "  + x + " y: " + y);
+        for (int direction = 0; direction < 3; direction++){
+            if (direction == 0){
+                if (grid[x][(y-1)] == "path"){
                     up = true;
                 } else {
                     up = false;
                 }
-                if (left && right && up && down){// if everything in the surrounding is a path, make the wall a path, removes the small holes
-                    System.out.println("Replacing " + x + " " + y);
-                    grid[x][y] = "wall";
+            } else if (direction == 1){
+                if (grid[(x-1)][y] == "path"){
+                    left = true;
+                } else {
+                    left = false;
                 }
-                **/
+            }else if (direction == 2){
+                 if (grid[x][(y+1)] == "path"){
+                    down = true;
+                } else {
+                    down = false;
+                }
+            }else if (direction == 3){
+                if (grid[(x+1)][y] == "path"){
+                    right = true;
+                } else {
+                    right = false;
+                }
             }
         }
-        //System.out.println(obtainPathX);
-        //System.out.println(obtainPathY);
-        DrawGame(); // displays the map
+        DrawGame();
     }
-    /**
-    public void CheckSurroundings(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
-        System.out.println("made it to the surroundings check for x: "  + x + " y: " + y);
-        boolean up; // true means you can move, false means you cant
-        boolean down; // true means you can move, false means you cant
-        boolean left; // true means you can move, false means you cant
-        boolean right; // true means you can move, false means you cant
-        int checkingX = x + 1; //i realize slightly too late that this variable isnt exactly required.. 
-        if (grid[checkingX][y] == "path" || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff"){ // checking if to the right there is a path
-            right = true;
-        } else {
-            right = false;
-        }
-        checkingX = x - 1;
-        if (grid[checkingX][y] == "path" || grid[checkingX][y] == "treasure" || grid[checkingX][y] == "buff"){ // checking if to the left thre is a path
-            left = true;
-        } else {
-            left = false;
-        }
-        int checkingY = y + 1;
-        if (grid[x][checkingY] == "path" || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff"){ // checking if below it is a path
-            down = true;
-        } else {
-            down = false;
-        }
-        checkingY = y - 1;
-        if (grid[x][checkingY] == "path" || grid[x][checkingY] == "treasure" || grid[x][checkingY] == "buff"){ // checking if above it is a path
-            up = true;
-        } else {
-            up = false;
-        }
-        if (left && right && up && down){// if everything in the surrounding is a path, make the wall a path, removes the small holes
-            System.out.println("Replacing " + x + " " + y);
-            grid[x][y] = "wall";
-        }
-    }
-    **/
+    
     public void ConstructPaths(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
         boolean up; // true means you can move, false means you cant
         boolean down; // true means you can move, false means you cant
