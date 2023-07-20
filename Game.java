@@ -20,6 +20,8 @@ public class Game
     int paths; // how many paths are required to make every area accessable
     int replaced = -1;
     int obtainables;
+    int testing = 0;
+    int checkingSS;
     // misc variables
     Scanner input = new Scanner(System.in); // variable to get keyboard inputs.
     String breaker = "↓--------------------↓"; // just to split up text to make it more readable
@@ -35,10 +37,19 @@ public class Game
         obtainPathX.clear(); //clears all prior x locations stored
         obtainPathY.clear(); //clears all prior y locations stored
         InitializeBuffs();
+        testing++;
+        //System.out.println(testing);
         return;
     }
     public void InitializeBuffs(){
+        testing++;
+        //System.out.println(testing);
         // sets parameters for the map based on what the player wants.
+        if (checkingSS  == 69){
+            System.out.println("Buffs coming from surrounding Check");
+        } else {
+            System.out.println("buff from somewhere else");
+        }
         System.out.println("How many buffs do you want on the map? Recommendation: 1-2 Max: 10");
         try {
             buffs = 0;
@@ -82,6 +93,9 @@ public class Game
         return;
     }
     public void CreateMap(){
+        testing++;
+        System.out.println(testing);
+        System.out.println("Create Grid + Add Buffs");
         obtainLocationX.clear();
         obtainLocationY.clear();
         for (int i = 0; i < gridSize; i++){ // changes whats being changed for the y
@@ -117,6 +131,12 @@ public class Game
                 obtainLocationY.add(randomTwo);
             }
         }
+        CreateBorders();
+    }
+    public void CreateBorders(){
+        testing++;
+        System.out.println(testing);
+        System.out.println("Create Borders");
         for (int i = 0; i < border; i++){ // spawns border along the x axis
             grid[i][gridSize] = "BORDER";
             //System.out.println("Placing border at " + i + " : " + border);
@@ -125,15 +145,19 @@ public class Game
             grid[gridSize][i] = "BORDER";
             //System.out.println("Placing border at " + i + " : " + border);
         }
+        SpawnLand();
+    }
+    public void SpawnLand(){
+        testing++;
+        System.out.println(testing);
+        System.out.println("Initial Set Of Paths");
         //this is the annoying part that creates paths that bridge off of the obtainables making them all acessable.
         // BIGGEST PROBLEM, MAKING PATH SYSTEM THAT WORKS. LOTS OF TRIAL AND ERROR INCOMING
-        //System.out.println("Initial Set Of Paths");
         for (int i = 0; i < obtainables; i++){ // goes through the location of all obtainables
             int startingX = obtainLocationX.get(i); // x location of said obtainable
             int startingY = obtainLocationY.get(i); // y location of said obtainable
             AssignPath(startingX, startingY); // checks the immediate surroundings of each obtainable
         }
-
         //System.out.println("Paths After");
         for (int t = 0; t < 4; t++){
             for (int i = 0; i < obtainPathX.size(); i++){ // goes through the location of all paths
@@ -185,8 +209,8 @@ public class Game
                 replaced++;
                 AssignPath(startingX, startingY);
                 //System.out.println("X: " + startingX  + " Y: " + startingY);
-                System.out.println(obtainPathX);
-                System.out.println(obtainPathY);
+                //System.out.println(obtainPathX);
+                //System.out.println(obtainPathY);
                 try { 
                     int wallX = obtainPathX.get(replaced);
                     int wallY = obtainPathY.get(replaced);
@@ -199,85 +223,70 @@ public class Game
             }
         }
         //ConstructPaths(x,y);
-        for (int i = 0; i < gridSize; i++){ // goes through entire x axis
-            for (int t = 0; t < gridSize; t++){ // goes through entire y axis
-                if (grid[i][t] == "null"){ // if there is nothing there
-                    grid[i][t] = "wall"; // it becomes a wall
-                }
-            }   
-        }
-        System.out.println("Checking for holes.");
-        for (int i = 0; i < gridSize; i++){ // goes through entire x axis
-            for (int t = 0; t < gridSize; t++){ // goes through entire y axis
-                if (grid[i][t] == "path"){
-                    System.out.println("There is a path at X: " + i + " Y: "+ t);
-                    boolean up;
-                    boolean left;
-                    boolean down;
-                    boolean right;
-                    if (grid[i][(t-1)] == "path"){
-                        up = true;
-                    } else {
-                        up = false;
-                    }
-                    if (grid[(i-1)][t] == "path"){
-                        left = true;
-                    } else {
-                        left = false;
-                    }
-                    if (grid[i][(t+1)] == "path"){
-                        down = true;
-                    } else {
-                        down = false;
-                    }
-                    if (grid[(i+1)][t] == "path"){
-                        right = true;
-                    } else {
-                        right = false;
-                    }
-                }
-            }   
-        }
-        //System.out.println(obtainPathX);
-        //System.out.println(obtainPathY);
+        FillHoles();
     }
-    public void CheckSurroundings(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
-        boolean up; // true means there is a path, false means there isnt
-        boolean down; // true means there is a path, false means there isnt
-        boolean left; // true means there is a path, false means there isnt
-        boolean right; // true means there is something, false means there isnt
-        System.out.println("made it to the surroundings check for x: "  + x + " y: " + y);
-        for (int direction = 0; direction < 3; direction++){
-            if (direction == 0){
-                if (grid[x][(y-1)] == "path"){
-                    up = true;
-                } else {
-                    up = false;
+    
+    public void FillHoles(){
+        testing++;
+        System.out.println(testing);
+        System.out.println("Fill Holes");
+        for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
+            for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
+                if (grid[i][t] == "null"){
+                    grid[i][t] = "wall";
                 }
-            } else if (direction == 1){
-                if (grid[(x-1)][y] == "path"){
-                    left = true;
-                } else {
-                    left = false;
-                }
-            }else if (direction == 2){
-                 if (grid[x][(y+1)] == "path"){
-                    down = true;
-                } else {
-                    down = false;
-                }
-            }else if (direction == 3){
-                if (grid[(x+1)][y] == "path"){
-                    right = true;
-                } else {
-                    right = false;
-                }
+            }
+        }
+        for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
+            for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
+                 CheckSurroundings(i,t);
             }
         }
         DrawGame();
     }
-    
+       
+    public void CheckSurroundings(int x, int y){
+        testing++;
+        System.out.println(testing);
+        System.out.println("Checking Surroundings");
+        boolean up; // true means you can move, false means you cant
+        boolean down; // true means you can move, false means you cant
+        boolean left; // true means you can move, false means you cant
+        boolean right; // true means you can move, false means you cant
+        int checkingX = x + 1; //i realize slightly too late that this variable isnt exactly required.. 
+        if (grid[checkingX][y] != "path"){ // if there is a path right, right will be true
+            right = false;
+        } else {
+            right = true;
+        }
+        checkingX = x - 1;
+        if (grid[checkingX][y] != "path"){ // if there is a path left, left will be true
+            left = false;
+        } else {
+            left = true;
+        }
+        int checkingY = y + 1;
+         if (grid[x][checkingY] != "path"){ // if there is a path below, down will be true
+            down = false;
+        } else {
+            down = true;
+        }
+        checkingY = y - 1;
+        if (grid[x][checkingY] != "path"){ // if there is a path above, up will be true...
+            up = false;
+        } else {
+            up = true;
+        }
+        checkingSS = 69;
+        if (up && down && left && right){
+            System.out.println("Changed " + x + " " + y + " to a path");
+            grid[x][y] = "path"; // if there are paths surrounding the entire thing, set it to a path as well
+        }
+    }
     public void ConstructPaths(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
+        testing++;
+        System.out.println(testing);
+        System.out.println("Construct Path");
         boolean up; // true means you can move, false means you cant
         boolean down; // true means you can move, false means you cant
         boolean left; // true means you can move, false means you cant
@@ -309,6 +318,9 @@ public class Game
         DirectionRandomizer(up, down, left, right, x, y);
     }
     public void AssignPath(int x,int y){ // checks surroundings, and if branching out will hit any of them, and then tells the initial calculation to stay away from branching to that side
+        testing++;
+        System.out.println(testing);
+        System.out.println("Assign Path");
         boolean up; // true means you can move, false means you cant
         boolean down; // true means you can move, false means you cant
         boolean left; // true means you can move, false means you cant
@@ -348,6 +360,9 @@ public class Game
         DirectionRandomizer(up, down, left, right, x, y);
     }
     public void DirectionRandomizer(boolean up, boolean down, boolean left, boolean right, int x, int y){
+        testing++;
+        System.out.println(testing);
+        System.out.println("DirectionRandomizer");
         int direction = rng.nextInt(3);
         if (direction == 0){ // up
             //System.out.println("Going up");
@@ -388,12 +403,14 @@ public class Game
         }
     }
     public void PlacePath(int x, int y){
+        testing++;
+        System.out.println(testing);
+        System.out.println("placed wall X " + x + " Y: " + y); 
         grid[x][y] = "path";
         obtainPathX.add(x);
         obtainPathY.add(y);
         return;
     }
-    
     public void DrawGame(){
         //System.out.println("\f");
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
