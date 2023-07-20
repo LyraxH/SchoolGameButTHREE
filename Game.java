@@ -244,43 +244,45 @@ public class Game
         }
         DrawGame();
     }
-       
     public void CheckSurroundings(int x, int y){
-        testing++;
-        System.out.println(testing);
-        System.out.println("Checking Surroundings");
+        int checkingX;
+        int checkingY;
         boolean up; // true means you can move, false means you cant
-        boolean down; // true means you can move, false means you cant
         boolean left; // true means you can move, false means you cant
+        boolean down; // true means you can move, false means you cant
         boolean right; // true means you can move, false means you cant
-        int checkingX = x + 1; //i realize slightly too late that this variable isnt exactly required.. 
-        if (grid[checkingX][y] != "path"){ // if there is a path right, right will be true
-            right = false;
-        } else {
-            right = true;
-        }
-        checkingX = x - 1;
-        if (grid[checkingX][y] != "path"){ // if there is a path left, left will be true
-            left = false;
-        } else {
-            left = true;
-        }
-        int checkingY = y + 1;
-         if (grid[x][checkingY] != "path"){ // if there is a path below, down will be true
-            down = false;
-        } else {
+        checkingY = y + 1;
+        if (grid[x][checkingY] == "path"){ // checking if moving down makes you hit the border
             down = true;
-        }
-        checkingY = y - 1;
-        if (grid[x][checkingY] != "path"){ // if there is a path above, up will be true...
-            up = false;
+            System.out.println("checked  Down, something below, continuing search.");
+            checkingY = y - 1;
+            if (grid[x][checkingY] == "path"){
+                up = true;
+                System.out.println("checked up, something above, continuing search.");
+                checkingX = x + 1;
+                if (grid[checkingX][y] == "path"){
+                    right = true;
+                    System.out.println("Checked right, something right, continuting search");
+                    checkingX = x - 1;
+                    if (grid[checkingX][y]== "path"){
+                        left = true;
+                        System.out.println("Checked left, something left, fully surroudned, replacing");
+                    } else {
+                        System.out.println("Checked left, nothing left");
+                        return;
+                    }
+                } else {
+                    System.out.println("Checked right, nothing right");
+                    return;
+                }
+            } else {
+                System.out.println("Checked Above, nothing above");
+                return;
+            }
         } else {
-            up = true;
-        }
-        checkingSS = 69;
-        if (up && down && left && right){
-            System.out.println("Changed " + x + " " + y + " to a path");
-            grid[x][y] = "path"; // if there are paths surrounding the entire thing, set it to a path as well
+            down = false;
+            System.out.println("Checked Down, nothing below");
+            return;
         }
     }
     public void ConstructPaths(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
