@@ -222,14 +222,6 @@ public class Game
                 }
             }
         }
-        //ConstructPaths(x,y);
-        FillHoles();
-    }
-    
-    public void FillHoles(){
-        testing++;
-        System.out.println(testing);
-        System.out.println("Fill Holes");
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
                 if (grid[i][t] == "null"){
@@ -237,14 +229,34 @@ public class Game
                 }
             }
         }
-        for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
-            for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
-                 CheckSurroundings(i,t);
+        //ConstructPaths(x,y);
+        FillHoles();
+    }
+    public void FillHoles(){
+        testing++;
+        System.out.println(testing);
+        System.out.println("Fill Holes");
+        try {
+            for (int i = 1; i < (border-1); i++){ // changes whats being printed for the y axis
+                for (int t = 1; t < (border-1); t++){ // changes whats being printed for the x axis
+                    if (grid[i][t] == "wall"){
+                        CheckSurroundings(i,t);
+                    }
+                }
             }
+        } catch (Exception e){
+            System.out.println(e + " BROKEN");
         }
         DrawGame();
     }
     public void CheckSurroundings(int x, int y){
+        /**
+        if (grid[x][y] == "wall"){
+            System.out.println("Checking wall X: " + x + " Y: " + y);
+        } else if (grid[x][y] == "path"){
+            System.out.println("Checking path X: " + x + " Y: " + y);
+        }
+        **/
         int checkingX;
         int checkingY;
         boolean up; // true means you can move, false means you cant
@@ -252,36 +264,38 @@ public class Game
         boolean down; // true means you can move, false means you cant
         boolean right; // true means you can move, false means you cant
         checkingY = y + 1;
-        if (grid[x][checkingY] == "path"){ // checking if moving down makes you hit the border
+        if (grid[x][checkingY] == "path" || grid[x][checkingY]== "buff" || grid[x][checkingY]== "treasure"){ // checking if moving down makes you hit the border
             down = true;
-            System.out.println("checked  Down, something below, continuing search.");
+            //System.out.println("checked  Down, something below, continuing search.");
             checkingY = y - 1;
-            if (grid[x][checkingY] == "path"){
+            if (grid[x][checkingY] == "path" || grid[x][checkingY]== "buff" || grid[x][checkingY]== "treasure"){
                 up = true;
-                System.out.println("checked up, something above, continuing search.");
+                //System.out.println("checked up, something above, continuing search.");
                 checkingX = x + 1;
-                if (grid[checkingX][y] == "path"){
+                if (grid[checkingX][y] == "path" || grid[checkingX][y]== "buff" || grid[checkingX][y]== "treasure"){
                     right = true;
-                    System.out.println("Checked right, something right, continuting search");
+                    //System.out.println("Checked right, something right, continuting search");
                     checkingX = x - 1;
-                    if (grid[checkingX][y]== "path"){
+                    if (grid[checkingX][y]== "path" || grid[checkingX][y]== "buff" || grid[checkingX][y]== "treasure"){
                         left = true;
-                        System.out.println("Checked left, something left, fully surroudned, replacing");
+                        //System.out.println("Checked left, something left, fully surroudned, replacing");
+                        grid[x][y] = "path";
+                        return;
                     } else {
-                        System.out.println("Checked left, nothing left");
+                        //System.out.println("Checked left, nothing left");
                         return;
                     }
                 } else {
-                    System.out.println("Checked right, nothing right");
+                    //System.out.println("Checked right, nothing right");
                     return;
                 }
             } else {
-                System.out.println("Checked Above, nothing above");
+                //System.out.println("Checked Above, nothing above");
                 return;
             }
         } else {
             down = false;
-            System.out.println("Checked Down, nothing below");
+            //System.out.println("Checked Down, nothing below");
             return;
         }
     }
