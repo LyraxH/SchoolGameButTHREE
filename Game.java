@@ -15,13 +15,12 @@ public class Game
     int buffs;// how many buffs on the map
     int treasure; // how many treasure items on the map
     int gridSize = 0; // how big the playable map is
-    int enemies; // how many enemies should show up
     int border; // where the border stands (one larger than playable map)
     int paths; // how many paths are required to make every area accessable
     int replaced = -1;
     int obtainables;
-    int testing = 0; // testing variable
-    int checkingSS; // also testing variable
+    //int testing = 0; // testing variable
+    //int checkingSS; // also testing variable
     // misc variables
     Scanner input = new Scanner(System.in); // variable to get keyboard inputs.
     String breaker = "↓--------------------↓"; // just to split up text to make it more readable
@@ -37,7 +36,7 @@ public class Game
         obtainPathX.clear(); //clears all prior x locations stored
         obtainPathY.clear(); //clears all prior y locations stored
         Introduction(0);
-        testing++;
+        //testing++;
         //System.out.println(testing);
         return;
     }
@@ -67,7 +66,7 @@ public class Game
                     CreateMap();
                 }
             } else if (choice == 2){
-                InitializeBuffs();
+                InitializeBuffs(0);
             } else if (choice == 3){
                 //LoadMap();
             } else if (choice == 4){
@@ -81,9 +80,9 @@ public class Game
             Introduction(5);
         }
     }
-    public void InitializeBuffs(){
+    public void InitializeBuffs(int returning){
         System.out.println("\f");
-        testing++;
+        //testing++;
         //System.out.println(testing);
         // sets parameters for the map based on what the player wants.
         /**
@@ -93,50 +92,57 @@ public class Game
             System.out.println("buff from somewhere else");
         }
         **/
-        System.out.println("How many buffs do you want on the map? Recommendation: 1-2 Max: 10");
+        System.out.println("How many buffs do you want on the map? Max: 10");
+        if (returning == 1){
+            System.out.println("Plese enter a number less than 10 and greater than 0");
+            input.nextLine();
+        } else if (returning == 2){
+            System.out.println("Plese enter a numerical value");
+            input.nextLine();
+        }
         try {
             buffs = 0;
             buffs = input.nextInt();
-            if (buffs > 10){
-                System.out.println("Plese enter a number less than 10");
-                InitializeBuffs();
+            if (buffs > 10 || buffs < 1){
+                InitializeBuffs(1);
                 return;
             } else {
-                InitializeTreasure();
+                InitializeTreasure(0);
                 return;
             }
         } catch (Exception e){
-            System.out.println("Plese enter a numerical value");
-            input.nextLine();
-            InitializeBuffs();
+            InitializeBuffs(2);
             return;
         }
     }
-    public void InitializeTreasure(){
-        System.out.println("How many obtainable treasures do you want on the map? Recommendation: 2-4 Max: 10");
+    public void InitializeTreasure(int returning){
+        System.out.println("How many obtainable treasures do you want on the map? Max: 10");
+        if (returning == 1){
+            System.out.println("Plese enter a number less than 10 and greater than 0");
+            input.nextLine();
+        } else if (returning == 2){
+            System.out.println("Plese enter a numerical value");
+            input.nextLine();
+        }
         try {
             treasure = input.nextInt();
-            if (treasure > 10){
-                System.out.println("Plese enter a number less than 10");
-                InitializeTreasure();
+            if (treasure > 10|| treasure < 1){
+                InitializeTreasure(1);
                 return;
             }
         } catch (Exception e){
-            System.out.println("Plese enter a numerical value");
-            input.nextLine();
-            InitializeTreasure();
+            InitializeTreasure(2);
             return;
         }
         obtainables = buffs + treasure;
         gridSize = obtainables * 2;
-        enemies = gridSize / 2;
         border = gridSize + 1;
         paths = 4;
         Introduction(2);
         return;
     }
     public void CreateMap(){
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("Create Grid + Add Buffs");
         obtainLocationX.clear();
@@ -177,7 +183,7 @@ public class Game
         CreateBorders();
     }
     public void CreateBorders(){
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("Create Borders");
         for (int i = 0; i < border; i++){ // spawns border along the x axis
@@ -191,7 +197,7 @@ public class Game
         SpawnLand();
     }
     public void SpawnLand(){
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("Initial Set Of Paths");
         //this is the annoying part that creates paths that bridge off of the obtainables making them all acessable.
@@ -276,7 +282,7 @@ public class Game
         FillHoles();
     }
     public void FillHoles(){
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("Fill Holes");
         try {
@@ -343,7 +349,7 @@ public class Game
         }
     }
     public void ConstructPaths(int x, int y){// will place pathss everywhere according to the ammount of paths needed.
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("Construct Path");
         boolean up; // true means you can move, false means you cant
@@ -377,7 +383,7 @@ public class Game
         DirectionRandomizer(up, down, left, right, x, y);
     }
     public void AssignPath(int x,int y){ // checks surroundings, and if branching out will hit any of them, and then tells the initial calculation to stay away from branching to that side
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("Assign Path");
         boolean up; // true means you can move, false means you cant
@@ -419,7 +425,7 @@ public class Game
         DirectionRandomizer(up, down, left, right, x, y);
     }
     public void DirectionRandomizer(boolean up, boolean down, boolean left, boolean right, int x, int y){
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("DirectionRandomizer");
         int direction = rng.nextInt(3);
@@ -462,7 +468,7 @@ public class Game
         }
     }
     public void PlacePath(int x, int y){
-        testing++;
+        //testing++;
         //System.out.println(testing);
         //System.out.println("placed wall X " + x + " Y: " + y); 
         grid[x][y] = "path";
@@ -486,13 +492,48 @@ public class Game
             }
             System.out.println(""); // next line
         }
-        NextSettings();
+        NextSettings(0);
         //System.out.println(obtainLocationX);
         //System.out.println(obtainLocationY);
     }
-    public void NextSettings(){ //Make it so they user can save the map state, (create an algorithm for this that works you dipshit. you can do it)
+    public void NextSettings(int returning){ //Make it so they user can save the map state, (create an algorithm for this that works you dipshit. you can do it)
+        int choice;
+        input.nextLine();
+        if (returning == 1){
+            System.out.println("Please set the map parameters through: (2) Change Parameters");
+        } else if (returning == 2){
+            System.out.println("Map parameters Saved");
+        } else if (returning == 5){
+            System.out.println("Please enter a number according to the list");
+        }
         System.out.println("What do you want to do now?");
         System.out.println(" (1) Save Map");
-        System.out.println(" (2) Fuck Off");
+        System.out.println(" (2) Return to Main Menu (this will reset your map)");
+        System.out.println(" (3) Quit");
+        try {
+            choice = input.nextInt();
+            if (choice == 1){ // save map
+                SaveMap();
+            } else if (choice == 2){ // return to main menu
+                Introduction(0);
+                obtainLocationX.clear();
+                obtainLocationY.clear();
+                obtainPathX.clear();
+                obtainPathY.clear();
+                for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
+                    for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
+                        grid[i][t] = null;
+                    }
+                }
+            } else if (choice == 3){ // exit
+                System.exit(0);
+            }
+        } catch (Exception e){
+            input.nextLine();
+            Introduction(5);
+        }
+    }
+    public void SaveMap(){
+        
     }
 }
