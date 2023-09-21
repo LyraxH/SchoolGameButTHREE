@@ -29,7 +29,8 @@ public class Game
     ArrayList<Integer> obtainLocationX = new ArrayList<Integer>();
     ArrayList<Integer> obtainLocationY = new ArrayList<Integer>();
     ArrayList<Integer> obtainPathX = new ArrayList<Integer>();
-    ArrayList<Integer> obtainPathY = new ArrayList<Integer>();    
+    ArrayList<Integer> obtainPathY = new ArrayList<Integer>();
+    public ArrayList<String> saveFile = new ArrayList<String>();
     public Game(){
         obtainLocationX.clear(); //clears all prior x locations stored
         obtainLocationY.clear(); //clears all prior y locations stored
@@ -68,7 +69,7 @@ public class Game
             } else if (choice == 2){
                 InitializeBuffs(0);
             } else if (choice == 3){
-                //LoadMap();
+                LoadMap();
             } else if (choice == 4){
                 System.exit(0);
             } else {
@@ -79,6 +80,10 @@ public class Game
             input.nextLine();
             Introduction(5);
         }
+    }
+    public void LoadMap(){
+        input.nextLine();
+        System.out.println("Please Input your saveFile code");
     }
     public void InitializeBuffs(int returning){
         System.out.println("\f");
@@ -534,6 +539,23 @@ public class Game
         }
     }
     public void SaveMap(){
-        
+        System.out.println("Creating Save File");
+        for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
+            for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
+                if (grid[t][i] == "path"){
+                    saveFile.add("p");
+                } else if (grid[t][i] == "treasure"){
+                    saveFile.add("t");
+                } else if (grid[t][i] == "buff"){
+                    saveFile.add("b");
+                } else if (grid[t][i] == "wall"){
+                    saveFile.add("w");
+                }
+            }
+        }
+        int length = saveFile.size();
+        for (int i = 0; i < length; i++){
+            System.out.print(saveFile.get(i));
+        }
     }
 }
