@@ -84,6 +84,9 @@ public class Game
     public void LoadMap(){
         input.nextLine();
         System.out.println("Please Input your saveFile code");
+        String codeInput = input.nextLine();
+        gridSize = codeInput.charAt(codeInput.length());
+        System.out.println(gridSize);
     }
     public void InitializeBuffs(int returning){
         System.out.println("\f");
@@ -553,6 +556,8 @@ public class Game
                 }
             }
         }
+        String outGoingGridSize = Integer.toString(gridSize);
+        saveFile.add(outGoingGridSize);
         int length = saveFile.size();
         for (int i = 0; i < length; i++){
             System.out.print(saveFile.get(i));
