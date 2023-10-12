@@ -56,8 +56,7 @@ public class Game
         System.out.println("<===What do you want to do?===>");
         System.out.println("(1) Create Map");
         System.out.println("(2) Change Parameters");
-        System.out.println("(3) Load Map");
-        System.out.println("(4) Exit");
+        System.out.println("(3) Exit");
         try {
             choice = input.nextInt();
             if (choice == 1){
@@ -69,8 +68,6 @@ public class Game
             } else if (choice == 2){
                 InitializeBuffs(0);
             } else if (choice == 3){
-                LoadMap();
-            } else if (choice == 4){
                 System.exit(0);
             } else {
                 input.nextLine();
@@ -80,13 +77,6 @@ public class Game
             input.nextLine();
             Introduction(5);
         }
-    }
-    public void LoadMap(){
-        input.nextLine();
-        System.out.println("Please Input your saveFile code");
-        String codeInput = input.nextLine();
-        gridSize = codeInput.charAt(codeInput.length());
-        System.out.println(gridSize);
     }
     public void InitializeBuffs(int returning){
         System.out.println("\f");
@@ -304,7 +294,7 @@ public class Game
         } catch (Exception e){
             System.out.println(e + " BROKEN");
         }
-        DrawGame();
+        DrawGame(0);
     }
     public void CheckSurroundings(int x, int y){
         /**
@@ -484,7 +474,8 @@ public class Game
         obtainPathY.add(y);
         return;
     }
-    public void DrawGame(){
+    public void DrawGame(int returning){
+        int choice;
         System.out.println("\f");
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
             for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
@@ -500,30 +491,16 @@ public class Game
             }
             System.out.println(""); // next line
         }
-        NextSettings(0);
-        //System.out.println(obtainLocationX);
-        //System.out.println(obtainLocationY);
-    }
-    public void NextSettings(int returning){ //Make it so they user can save the map state, (create an algorithm for this that works you dipshit. you can do it)
-        int choice;
-        input.nextLine();
-        if (returning == 1){
-            System.out.println("Please set the map parameters through: (2) Change Parameters");
-        } else if (returning == 2){
-            System.out.println("Map parameters Saved");
-        } else if (returning == 5){
+        if (returning == 5){
             System.out.println("Please enter a number according to the list");
         }
         System.out.println("What do you want to do now?");
-        System.out.println(" (1) Save Map");
-        System.out.println(" (2) Return to Main Menu (this will reset your map)");
-        System.out.println(" (3) Quit");
+        System.out.println(" (1) Return to Main Menu (this will reset your map)");
+        System.out.println(" (2) Quit");
+        input.nextLine();
         try {
             choice = input.nextInt();
-            if (choice == 1){ // save map
-                SaveMap();
-            } else if (choice == 2){ // return to main menu
-                Introduction(0);
+            if (choice == 1){ // return to main menu
                 obtainLocationX.clear();
                 obtainLocationY.clear();
                 obtainPathX.clear();
@@ -533,34 +510,16 @@ public class Game
                         grid[i][t] = null;
                     }
                 }
-            } else if (choice == 3){ // exit
+                Introduction(0);
+                return;
+            } else if (choice == 2){ // exit
                 System.exit(0);
+            } else {
+                input.nextLine();
+                DrawGame(5);
             }
         } catch (Exception e){
-            input.nextLine();
-            Introduction(5);
-        }
-    }
-    public void SaveMap(){
-        System.out.println("Creating Save File");
-        for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
-            for (int t = 0; t < border; t++){ // changes whats being printed for the x axis
-                if (grid[t][i] == "path"){
-                    saveFile.add("p");
-                } else if (grid[t][i] == "treasure"){
-                    saveFile.add("t");
-                } else if (grid[t][i] == "buff"){
-                    saveFile.add("b");
-                } else if (grid[t][i] == "wall"){
-                    saveFile.add("w");
-                }
-            }
-        }
-        String outGoingGridSize = Integer.toString(gridSize);
-        saveFile.add(outGoingGridSize);
-        int length = saveFile.size();
-        for (int i = 0; i < length; i++){
-            System.out.print(saveFile.get(i));
+            DrawGame(5);
         }
     }
 }
