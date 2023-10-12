@@ -194,7 +194,7 @@ public class Game
         }
         SpawnLand();
     }
-    public void SpawnLand(){
+    public void SpawnLand(){ // just saying you will need to use your imagination a bit to see a map in all this LOL.
         //testing++;
         //System.out.println(testing);
         //System.out.println("Initial Set Of Paths");
@@ -474,7 +474,7 @@ public class Game
         obtainPathY.add(y);
         return;
     }
-    public void DrawGame(int returning){
+    public void DrawGame(int returning){ // these "images" are actually unicode characters. and I don't need any special licenceing or anything to use them. Avoiding intellectual property
         int choice;
         System.out.println("\f");
         for (int i = 0; i < border; i++){ // changes whats being printed for the y axis
@@ -510,15 +510,18 @@ public class Game
                         grid[i][t] = null;
                     }
                 }
+                input.nextLine();
                 Introduction(0);
                 return;
             } else if (choice == 2){ // exit
+                input.nextLine();
                 System.exit(0);
             } else {
                 input.nextLine();
                 DrawGame(5);
             }
         } catch (Exception e){
+            input.nextLine();
             DrawGame(5);
         }
     }
